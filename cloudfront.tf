@@ -2,6 +2,7 @@ locals {
   s3_origin_id = "myS3Origin"
 }
 
+# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudfront_distribution
 resource "aws_cloudfront_distribution" "s3_distribution" {
   origin {
     domain_name              = aws_s3_bucket.website.bucket_regional_domain_name
@@ -104,10 +105,20 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   }
 }
 
+# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudfront_origin_access_control
 resource "aws_cloudfront_origin_access_control" "default" {
   name                              = "OAC ${aws_s3_bucket.website.id}"
   description                       = "Origin Access Controls for Static Website Hosting ${aws_s3_bucket.website.id}"
   origin_access_control_origin_type = "s3"
   signing_behavior                  = "always"
   signing_protocol                  = "sigv4"
+}
+
+# https://developer.hashicorp.com/terraform/language/resources/terraform-data
+resource "terraform_data" "invalidate_cache" {
+  provisioner "local-exec" {
+    command = <<EOT
+aws cloudfront create-invalidation --distribution-id ${aws_cloudfront_distribution.s3_distribution.id} --paths /*
+EOT
+  }
 }
