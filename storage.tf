@@ -13,6 +13,7 @@ resource "aws_s3_bucket" "website" {
   }
 }
 
+# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_website_configuration
 resource "aws_s3_bucket_website_configuration" "website" {
   bucket = aws_s3_bucket.website.id
 
@@ -25,6 +26,7 @@ resource "aws_s3_bucket_website_configuration" "website" {
   }
 }
 
+# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_policy
 resource "aws_s3_bucket_policy" "only_allow_access_from_cloudfront" {
   bucket = aws_s3_bucket.website.id
 
@@ -57,6 +59,7 @@ resource "aws_s3_object" "index_html" {
   bucket = aws_s3_bucket.website.id
   key    = "index.html"
   source = "./public_html/index.html"
+  content_type = "text/html"
 
   # The filemd5() function is available in Terraform 0.11.12 and later
   # For Terraform 0.11.11 and earlier, use the md5() function and the file() function:
@@ -68,5 +71,6 @@ resource "aws_s3_object" "error_html" {
   bucket = aws_s3_bucket.website.id
   key    = "error.html"
   source = "./public_html/error.html"
+  content_type = "text/html"
   etag   = filemd5("./public_html/error.html")
 }
