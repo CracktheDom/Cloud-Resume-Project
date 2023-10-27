@@ -56,9 +56,9 @@ resource "aws_s3_bucket_policy" "only_allow_access_from_cloudfront" {
 }
 
 resource "aws_s3_object" "index_html" {
-  bucket = aws_s3_bucket.website.id
-  key    = "index.html"
-  source = "./public_html/index.html"
+  bucket       = aws_s3_bucket.website.id
+  key          = "index.html"
+  source       = "./public_html/index.html"
   content_type = "text/html"
 
   # The filemd5() function is available in Terraform 0.11.12 and later
@@ -68,9 +68,9 @@ resource "aws_s3_object" "index_html" {
 }
 
 resource "aws_s3_object" "error_html" {
-  bucket = aws_s3_bucket.website.id
-  key    = "error.html"
-  source = "./public_html/error.html"
+  bucket       = aws_s3_bucket.website.id
+  key          = "error.html"
+  source       = "./public_html/error.html"
   content_type = "text/html"
-  etag   = filemd5("./public_html/error.html")
+  etag         = filemd5("./public_html/error.html")
 }
