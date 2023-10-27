@@ -1,0 +1,17 @@
+tasks:
+  - name: terraform
+    before: |
+      cd $THEIA_WORKSPACE_ROOT
+      source ./bin/install_terraform_cli
+      source ./bin/set_tf_alias
+  - name: aws-cli
+    env:
+      AWS_CLI_AUTO_PROMPT: on-partial
+    before: |
+      cd $THEIA_WORKSPACE_ROOT
+      source ./bin/install_aws_cli
+vscode:
+  extensions:
+    - amazonwebservices.aws-toolkit-vscode
+    - hashicorp.terraform
+    - mhutchie.git-graph
